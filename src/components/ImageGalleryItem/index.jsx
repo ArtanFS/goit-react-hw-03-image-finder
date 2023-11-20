@@ -1,10 +1,14 @@
-import { ImageItem } from './ImageGalleryItem.styled';
+import css from './ImageGalleryItem.module.css';
 
 const ImageGalleryItem = ({ images }) => {
   return (
-    <ImageItem>
-      <img src={images.webformatURL} alt={images.tags} />
-    </ImageItem>
+    <li className={css.ImageGalleryItem}>
+      <img
+        className={css.ImageGalleryItem_image}
+        src={images.webformatURL}
+        alt={images.tags}
+      />
+    </li>
   );
 };
 

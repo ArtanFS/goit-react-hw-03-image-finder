@@ -1,6 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
-
-const GlobalStyle = createGlobalStyle`
+@import-normalize;
 
 body {
   margin: 0;
@@ -41,6 +39,3 @@ h6,
 p {
   margin: 0;
 }
-`;
-
-export default GlobalStyle;

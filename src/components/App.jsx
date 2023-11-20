@@ -3,6 +3,7 @@ import { getImages } from './API/api';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
+import css from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -50,7 +51,7 @@ export class App extends Component {
   render() {
     const { images, loadMore, isLoading } = this.state;
     return (
-      <div>
+      <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
         {isLoading && <h1>Loading...</h1>}
         {images && <ImageGallery images={images} />}

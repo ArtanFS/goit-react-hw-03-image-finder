@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import css from './Searchbar.module.css';
+import { FiSearch } from 'react-icons/fi';
 
 class Searchbar extends Component {
   state = {
@@ -20,14 +22,14 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.onSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
+      <header className={css.Searchbar}>
+        <form className={css.SearchForm} onSubmit={this.onSubmit}>
+          <button type="submit" className={css.SearchForm_button}>
+            <FiSearch size="22px" />
           </button>
 
           <input
-            className="input"
+            className={css.SearchForm_input}
             type="text"
             autoComplete="off"
             autoFocus
