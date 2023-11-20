@@ -3,6 +3,7 @@ import { getImages } from './API/api';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
 import Button from './Button';
+import { Modal } from './Modal';
 import css from './App.module.css';
 
 export class App extends Component {
@@ -12,6 +13,9 @@ export class App extends Component {
     page: 1,
     isLoading: false,
     loadMore: false,
+    isShowModal: false,
+    modalImg: '',
+    modalImgAlt: '',
     error: '',
   };
 
@@ -48,14 +52,33 @@ export class App extends Component {
     }));
   };
 
+  toggleModal = (image, alt) => {
+    this.setState(({ isShowModal }) => ({
+      isShowModal: !isShowModal,
+      modalImg: image,
+      modalImgAlt: alt,
+    }));
+  };
+
   render() {
-    const { images, loadMore, isLoading } = this.state;
+    const { images, loadMore, isLoading, isShowModal, modalImg, modalImgAlt } =
+      this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
         {isLoading && <h1>Loading...</h1>}
-        {images && <ImageGallery images={images} />}
+        {images && (
+          <ImageGallery images={images} openModal={this.toggleModal} />
+        )}
         {loadMore && <Button onClick={this.handleLoadMore} />}
+
+        {isShowModal && (
+          <Modal
+            image={modalImg}
+            alt={modalImgAlt}
+            closeModal={this.toggleModal}
+          />
+        )}
       </div>
     );
   }
