@@ -1,18 +1,14 @@
-import ContactListItem from '../ContactListItem';
-// import { List } from './ContactList.styled';
+import ImageGalleryItem from '../ImageGalleryItem';
+import { Images } from './ImageGallery.styled';
 
-const ContactList = ({ contacts, deleteContact }) => {
+const ImageGallery = ({ images }) => {
+  console.log({ images });
+
   return (
-    <ul class="gallery">
-      {contacts.map(el => (
-        <ContactListItem
-          key={el.id}
-          contacts={el}
-          deleteContact={deleteContact}
-        />
-      ))}
-    </ul>
+    <Images>
+      {images && images.map(el => <ImageGalleryItem key={el.id} images={el} />)}
+    </Images>
   );
 };
 
-export default ContactList;
+export default ImageGallery;

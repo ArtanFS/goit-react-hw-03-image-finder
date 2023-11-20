@@ -1,11 +1,11 @@
-// import { ListItem } from './ContactListItem.styled';
+import { ImageItem } from './ImageGalleryItem.styled';
 
-const ContactListItem = ({ contacts, deleteContact }) => {
+const ImageGalleryItem = ({ images }) => {
   return (
-    <li class="gallery-item">
-      <img src="" alt="" />
-    </li>
+    <ImageItem>
+      <img src={images.webformatURL} alt={images.tags} />
+    </ImageItem>
   );
 };
 
-export default ContactListItem;
+export default ImageGalleryItem;
