@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Searchbar from './Searchbar';
 import { getImages } from './API/api';
+import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
+import Button from './Button';
 
 export class App extends Component {
   state = {
@@ -9,38 +10,51 @@ export class App extends Component {
     query: '',
     page: 1,
     isLoading: false,
+    loadMore: false,
     error: '',
   };
 
   componentDidUpdate(_, prevState) {
-    if (prevState.query !== this.state.query) {
+    const { query, page } = this.state;
+    if (prevState.query !== query || prevState.page !== page) {
       this.handleImages();
     }
   }
 
   handleImages = async () => {
+    const { images, query, page } = this.state;
     try {
       this.setState({ isLoading: true });
-      const data = await getImages(this.state.query, this.state.page);
-      // console.log(data);
-      this.setState({ images: data, error: '', isLoading: false });
+      const data = await getImages(query, page);
+      this.setState({
+        images: [...images, ...data.hits],
+        error: '',
+        isLoading: false,
+        loadMore: page < Math.ceil(data.totalHits / 12),
+      });
     } catch (error) {
       // this.setState({ error: error.response.data, isLoading: false });
     }
   };
 
   onSubmit = searchData => {
-    this.setState({ query: searchData });
+    this.setState({ query: searchData, images: [], page: 1 });
+  };
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
 
   render() {
-    const { images } = this.state;
-    // console.log(images.hits);
-
+    const { images, loadMore, isLoading } = this.state;
     return (
       <div>
         <Searchbar onSubmit={this.onSubmit} />
-        {images && <ImageGallery images={images.hits} />}
+        {isLoading && <h1>Loading...</h1>}
+        {images && <ImageGallery images={images} />}
+        {loadMore && <Button onClick={this.handleLoadMore} />}
       </div>
     );
   }
