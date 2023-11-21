@@ -5,6 +5,7 @@ import ImageGallery from './ImageGallery';
 import Button from './Button';
 import { Modal } from './Modal';
 import css from './App.module.css';
+import { ThreeDots } from 'react-loader-spinner';
 
 export class App extends Component {
   state = {
@@ -16,6 +17,7 @@ export class App extends Component {
     isShowModal: false,
     modalImg: '',
     modalImgAlt: '',
+    noResult: false,
     error: '',
   };
 
@@ -33,12 +35,17 @@ export class App extends Component {
       const data = await getImages(query, page);
       this.setState({
         images: [...images, ...data.hits],
-        error: '',
-        isLoading: false,
         loadMore: page < Math.ceil(data.totalHits / 12),
+        noResult: false,
+        error: '',
       });
+      if (data.hits.length === 0) {
+        this.setState({ noResult: true });
+      }
     } catch (error) {
-      // this.setState({ error: error.response.data, isLoading: false });
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
@@ -61,17 +68,44 @@ export class App extends Component {
   };
 
   render() {
-    const { images, loadMore, isLoading, isShowModal, modalImg, modalImgAlt } =
-      this.state;
+    const {
+      images,
+      loadMore,
+      isLoading,
+      isShowModal,
+      modalImg,
+      modalImgAlt,
+      noResult,
+      error,
+    } = this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
-        {isLoading && <h1>Loading...</h1>}
         {images && (
           <ImageGallery images={images} openModal={this.toggleModal} />
         )}
+        {isLoading && (
+          <ThreeDots
+            wrapperClass={css.Loader}
+            height="80"
+            width="80"
+            radius="15"
+            color="#3f51b5"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        )}
         {loadMore && <Button onClick={this.handleLoadMore} />}
-
+        {noResult && (
+          <h1 className={css.Message}>
+            Sorry, nothing was found for your query.
+          </h1>
+        )}
+        {error && (
+          <h1 className={css.Message}>
+            Sorry, but some error occurred: {error}.
+          </h1>
+        )}
         {isShowModal && (
           <Modal
             image={modalImg}
