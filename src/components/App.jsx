@@ -14,9 +14,7 @@ export class App extends Component {
     page: 1,
     isLoading: false,
     loadMore: false,
-    isShowModal: false,
-    modalImg: '',
-    modalImgAlt: '',
+    modalData: null,
     noResult: false,
     error: '',
   };
@@ -50,7 +48,9 @@ export class App extends Component {
   };
 
   onSubmit = searchData => {
-    this.setState({ query: searchData, images: [], page: 1 });
+    if (this.state.query !== searchData) {
+      this.setState({ query: searchData, images: [], page: 1 });
+    }
   };
 
   handleLoadMore = () => {
@@ -59,25 +59,13 @@ export class App extends Component {
     }));
   };
 
-  toggleModal = (image, alt) => {
-    this.setState(({ isShowModal }) => ({
-      isShowModal: !isShowModal,
-      modalImg: image,
-      modalImgAlt: alt,
-    }));
+  toggleModal = (modalData = null) => {
+    this.setState({ modalData });
   };
 
   render() {
-    const {
-      images,
-      loadMore,
-      isLoading,
-      isShowModal,
-      modalImg,
-      modalImgAlt,
-      noResult,
-      error,
-    } = this.state;
+    const { images, query, loadMore, isLoading, modalData, noResult, error } =
+      this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
@@ -97,21 +85,17 @@ export class App extends Component {
         )}
         {loadMore && <Button onClick={this.handleLoadMore} />}
         {noResult && (
-          <h1 className={css.Message}>
+          <p className={css.Message}>
             Sorry, nothing was found for your query.
-          </h1>
+          </p>
         )}
         {error && (
-          <h1 className={css.Message}>
+          <p className={css.Message}>
             Sorry, but some error occurred: {error}.
-          </h1>
+          </p>
         )}
-        {isShowModal && (
-          <Modal
-            image={modalImg}
-            alt={modalImgAlt}
-            closeModal={this.toggleModal}
-          />
+        {modalData && (
+          <Modal modalData={modalData} closeModal={this.toggleModal} />
         )}
       </div>
     );
