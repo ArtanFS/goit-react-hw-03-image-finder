@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import css from './Modal.module.css';
 
-export class Modal extends Component {
+class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.hendleKeyboardClose);
   }
@@ -32,3 +32,5 @@ export class Modal extends Component {
     );
   }
 }
+
+export default Modal;

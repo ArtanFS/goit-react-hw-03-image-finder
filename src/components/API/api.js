@@ -16,4 +16,4 @@ async function getImages(query, page) {
   return data;
 }
 
-export { getImages };
+export default getImages;
